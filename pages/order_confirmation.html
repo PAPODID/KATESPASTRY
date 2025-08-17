@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Confirmation de Commande - KATE'S PASTRY</title>
+  <meta name="description" content="Votre commande a été confirmée avec succès. Merci de votre confiance." />
+  <link rel="stylesheet" href="../css/main.css" />
+  <style>
+    footer {
+        background-color: #A9A9A9 !important;
+        color: #FFFFFF !important;
+    }
+    footer .font-body, footer .font-cta, footer .font-headline {
+        color: #FFFFFF !important;
+    }
+    footer a {
+        color: #FFFFFF !important;
+    }
+    footer a:hover {
+        color: #E0E0E0 !important;
+    }
+  </style>
+</head>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const order = JSON.parse(localStorage.getItem('currentOrder')) || {};
+    console.log('Order from localStorage:', order);
+
+    // Mettre à jour les champs
+    document.getElementById('order-number').textContent = order.id || '-';
+    document.getElementById('order-date').textContent = order.timestamp ? new Date(order.timestamp).toLocaleDateString() : '-';
+    document.getElementById('client-name').textContent = order.userData ? `${order.userData.firstName} ${order.userData.lastName}` : '-';
+    document.getElementById('client-email').textContent = order.userData ? order.userData.email : '-';
+    document.getElementById('total-price').textContent = order.total ? `${order.total} FCFA` : '0 FCFA';
+
+    // Mettre à jour les articles commandés
+    const orderItems = document.getElementById('order-items');
+    if (order.cart && order.cart.length > 0) {
+      orderItems.innerHTML = order.cart.map(item => `
+        <div class="cart-item">
+          <img src="${item.image}" alt="${item.name}" width="50">
+          <span>${item.name} - ${item.quantity} x ${item.price} FCFA</span>
+        </div>
+      `).join('');
+    } else {
+      orderItems.innerHTML = '<p>Aucun article.</p>';
+    }
+  });
+</script>
+<body class="bg-background text-text-primary">
+<!-- Navigation Header -->
+<header class="bg-surface shadow-soft sticky top-0 z-50">
+  <nav class="container mx-auto px-4 py-4">
+    <div class="flex items-center justify-between">
+      <!-- Logo -->
+      <div class="flex items-center space-x-3">
+        <svg class="w-10 h-10 text-accent" viewBox="0 0 40 40" fill="currentColor">
+          <path d="M20 2C15.5 2 12 5.5 12 10c0 2.5 1 4.8 2.6 6.5L20 38l5.4-21.5C27 14.8 28 12.5 28 10c0-4.5-3.5-8-8-8zm0 11c-1.7 0-3-1.3-3-3s1.3-3 3-3 3 1.3 3 3-1.3 3-3 3z"/>
+          <circle cx="20" cy="10" r="2" fill="white"/>
+        </svg>
+        <div>
+          <h1 class="font-headline text-xl font-bold text-primary">KATE'S PASTRY</h1>
+          <p class="font-accent text-sm text-accent">Tradition & Excellence</p>
+        </div>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <div class="hidden md:flex items-center space-x-8">
+        <a href="homepage.html" class="font-body font-medium text-text-secondary hover:text-accent transition-smooth">Accueil</a>
+        <a href="product_catalog.html" class="font-body font-medium text-text-secondary hover:text-accent transition-smooth">Nos Créations</a>
+        <a href="contact_location.html" class="font-body font-medium text-text-secondary hover:text-accent transition-smooth">Contact</a>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button class="md:hidden p-2" id="mobile-menu-btn">
+        <svg class="w-6 h-6 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Navigation -->
+    <div class="hidden md:hidden mt-4 pb-4 border-t border-border" id="mobile-menu">
+      <div class="flex flex-col space-y-4 pt-4">
+        <a href="homepage.html" class="font-body font-medium text-text-secondary hover:text-accent transition-smooth">Accueil</a>
+        <a href="product_catalog.html" class="font-body font-medium text-text-secondary hover:text-accent transition-smooth">Nos Créations</a>
+        <a href="contact_location.html" class="font-body font-medium text-text-secondary hover:text-accent transition-smooth">Contact</a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- Main Content -->
+<main class="container mx-auto px-4 py-12">
+  <!-- Success Message -->
+  <div class="text-center mb-12">
+    <div class="inline-flex items-center justify-center w-20 h-20 bg-success/10 rounded-full mb-6">
+      <svg class="w-10 h-10 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+      </svg>
+    </div>
+    <h1 class="font-headline text-3xl font-bold text-primary mb-4">Commande Confirmée !</h1>
+    <p class="font-body text-lg text-text-secondary max-w-2xl mx-auto">
+      Merci pour votre commande ! Nous avons bien reçu votre demande et nous vous enverrons un email de confirmation avec tous les détails.
+    </p>
+  </div>
+
+  <!-- Order Details -->
+  <div class="max-w-2xl mx-auto">
+    <div class="card mb-8">
+      <h2 class="font-headline text-xl font-bold text-primary mb-6">Détails de votre commande</h2>
+
+      <div class="space-y-4" id="order-details">
+        <div class="flex justify-between items-center pb-2 border-b border-border">
+          <span class="font-body font-medium text-text-secondary">Numéro de commande :</span>
+          <span class="font-cta font-medium text-primary" id="order-id">-</span>
+        </div>
+        <div class="flex justify-between items-center pb-2 border-b border-border">
+          <span class="font-body font-medium text-text-secondary">Date :</span>
+          <span class="font-cta font-medium text-primary" id="order-date">-</span>
+        </div>
+        <div class="flex justify-between items-center pb-2 border-b border-border">
+          <span class="font-body font-medium text-text-secondary">Client :</span>
+          <span class="font-cta font-medium text-primary" id="customer-name">-</span>
+        </div>
+        <div class="flex justify-between items-center pb-2 border-b border-border">
+          <span class="font-body font-medium text-text-secondary">Email :</span>
+          <span class="font-cta font-medium text-primary" id="customer-email">-</span>
+        </div>
+      </div>
+
+      <!-- Order Items -->
+      <div class="mt-8">
+        <h3 class="font-headline text-lg font-bold text-primary mb-4">Articles commandés</h3>
+        <div id="order-items" class="space-y-3">
+          <!-- Items will be populated by JavaScript -->
+        </div>
+      </div>
+
+      <!-- Order Total -->
+      <div class="mt-6 pt-4 border-t border-border">
+        <div class="flex justify-between items-center">
+          <span class="font-headline text-lg font-bold text-primary">Total</span>
+          <span class="font-headline text-xl font-bold text-accent" id="order-total">0 FCFA</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Next Steps -->
+    <div class="card mb-8">
+      <h2 class="font-headline text-xl font-bold text-primary mb-6">Prochaines étapes</h2>
+      <div class="space-y-4">
+        <div class="flex items-start space-x-3">
+          <div class="flex-shrink-0 w-6 h-6 bg-accent text-white rounded-full flex items-center justify-center text-sm font-bold">1</div>
+          <div>
+            <h3 class="font-cta font-medium text-primary">Confirmation par email</h3>
+            <p class="font-body text-sm text-text-secondary">Vous recevrez un email de confirmation avec le reçu PDF de votre commande.</p>
+          </div>
+        </div>
+        <div class="flex items-start space-x-3">
+          <div class="flex-shrink-0 w-6 h-6 bg-accent text-white rounded-full flex items-center justify-center text-sm font-bold">2</div>
+          <div>
+            <h3 class="font-cta font-medium text-primary">Préparation</h3>
+            <p class="font-body text-sm text-text-secondary">Nos artisans boulangers préparent vos viennoiseries avec soin.</p>
+          </div>
+        </div>
+        <div class="flex items-start space-x-3">
+          <div class="flex-shrink-0 w-6 h-6 bg-accent text-white rounded-full flex items-center justify-center text-sm font-bold">3</div>
+          <div>
+            <h3 class="font-cta font-medium text-primary">Contact pour récupération</h3>
+            <p class="font-body text-sm text-text-secondary">Nous vous contacterons pour organiser la récupération de votre commande.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="text-center space-y-4">
+      <a href="product_catalog.html" class="inline-block bg-accent text-white py-3 px-8 rounded-lg font-cta font-semibold hover:bg-accent-600 transition-smooth">
+        Continuer mes achats
+      </a>
+      <div>
+        <a href="homepage.html" class="font-body font-medium text-text-secondary hover:text-accent transition-smooth">
+          Retour à l'accueil
+        </a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Footer -->
+<footer class="bg-primary text-white py-16">
+  <div class="container mx-auto px-4">
+    <div class="grid md:grid-cols-4 gap-8">
+      <!-- Brand -->
+      <div class="md:col-span-2">
+        <div class="flex items-center space-x-3 mb-6">
+          <svg class="w-10 h-10 text-accent" viewBox="0 0 40 40" fill="currentColor">
+            <path d="M20 2C15.5 2 12 5.5 12 10c0 2.5 1 4.8 2.6 6.5L20 38l5.4-21.5C27 14.8 28 12.5 28 10c0-4.5-3.5-8-8-8zm0 11c-1.7 0-3-1.3-3-3s1.3-3 3-3 3 1.3 3 3-1.3 3-3 3z"/>
+            <circle cx="20" cy="10" r="2" fill="white"/>
+          </svg>
+          <div>
+            <h1 class="font-headline text-xl font-bold text-primary">KATE'S PASTRY</h1>
+            <p class="font-accent text-sm text-accent">Tradition & Excellence</p>
+          </div>
+        </div>
+        <p class="font-body text-white/80 mb-6 max-w-md">
+          Découvrez l'excellence de la tradition française avec nos viennoiseries artisanales,
+          préparées chaque matin selon les techniques ancestrales.
+        </p>
+        <div class="flex space-x-4">
+          <a href="#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-smooth">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+            </svg>
+          </a>
+          <a href="#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-smooth">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z"/>
+            </svg>
+          </a>
+          <a href="#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-smooth">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24.009 12.017 24.009c6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641.001.012.001z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Contact -->
+      <div>
+        <h3 class="font-headline text-lg font-bold mb-4">Contact</h3>
+        <div class="space-y-3">
+          <div class="flex items-center space-x-3">
+            <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            <span class="font-body text-sm">Lomé, Togo</span>
+          </div>
+          <div class="flex items-center space-x-3">
+            <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+            </svg>
+            <span class="font-body text-sm">+228 91 23 47 97</span>
+          </div>
+          <div class="flex items-center space-x-3">
+            <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+            </svg>
+            <span class="font-body text-sm">contact@katespastry.tg</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hours -->
+      <div>
+        <h3 class="font-headline text-lg font-bold mb-4">Horaires</h3>
+        <div class="space-y-2">
+          <div class="flex justify-between">
+            <span class="font-body text-sm">Lun - Ven</span>
+            <span class="font-body text-sm">6h - 19h</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="font-body text-sm">Samedi</span>
+            <span class="font-body text-sm">6h - 20h</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="font-body text-sm">Dimanche</span>
+            <span class="font-body text-sm">7h - 18h</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Copyright -->
+    <div class="border-t border-white/10 mt-12 pt-8 text-center">
+      <p class="font-body text-sm text-white/60">
+        © 2024 Kate's Pastry. Tous droits réservés.
+      </p>
+    </div>
+  </div>
+</footer>
+
+<!-- Scripts -->
+<script src="../public/app-config.js"></script>
+<script src="../public/cart-manager.js"></script>
+<script id="dhws-dataInjector" src="../public/dhws-data-injector.js"></script>
+
+<script>
+  // Mobile Menu Toggle
+  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  mobileMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+  });
+
+  // Load order details when page loads
+  document.addEventListener('DOMContentLoaded', function() {
+    // S'assurer que cartManager est chargé
+    if (typeof cartManager === 'undefined') {
+      console.error('cartManager non trouvé. Vérifiez que cart-manager.js est bien chargé.');
+      setTimeout(() => {
+        window.location.href = 'homepage.html';
+      }, 3000);
+      return;
+    }
+
+    const currentOrder = cartManager.getCurrentOrder();
+
+    if (currentOrder && currentOrder.id) {
+      console.log('Commande trouvée:', currentOrder);
+
+      // Remplir les détails de la commande
+      const orderIdEl = document.getElementById('order-id');
+      const orderDateEl = document.getElementById('order-date');
+      const customerNameEl = document.getElementById('customer-name');
+      const customerEmailEl = document.getElementById('customer-email');
+
+      if (orderIdEl) orderIdEl.textContent = currentOrder.id || 'N/A';
+      if (orderDateEl) orderDateEl.textContent = new Date(currentOrder.timestamp).toLocaleDateString('fr-FR') || 'N/A';
+      if (customerNameEl) {
+        const firstName = currentOrder.userData?.firstName || '';
+        const lastName = currentOrder.userData?.lastName || '';
+        customerNameEl.textContent = `${firstName} ${lastName}`.trim() || 'N/A';
+      }
+      if (customerEmailEl) customerEmailEl.textContent = currentOrder.userData?.email || 'N/A';
+
+      // Remplir la liste des articles
+      const articlesContainer = document.getElementById('order-items');
+      if (articlesContainer) {
+        articlesContainer.innerHTML = '';
+
+        if (currentOrder.cart && currentOrder.cart.length > 0) {
+          currentOrder.cart.forEach(item => {
+            const itemEl = document.createElement('div');
+            itemEl.className = 'flex justify-between items-center py-2 border-b border-border last:border-b-0';
+            itemEl.innerHTML = `
+              <div>
+                <span class="font-body font-medium text-primary">${item.name || 'Article'}</span>
+                <span class="font-body text-sm text-text-secondary ml-2">x${item.quantity || 1}</span>
+              </div>
+              <span class="font-cta font-medium text-primary">${cartManager.formatPrice((item.price || 0) * (item.quantity || 1))}</span>
+            `;
+            articlesContainer.appendChild(itemEl);
+          });
+        } else {
+          articlesContainer.innerHTML = '<p class="text-text-secondary">Aucun article trouvé dans cette commande.</p>';
+        }
+      }
+
+      // Remplir le total
+      const totalEl = document.getElementById('order-total');
+      if (totalEl) {
+        totalEl.textContent = cartManager.formatPrice(currentOrder.total || 0);
+      }
+
+      console.log('Page de confirmation chargée avec succès');
+
+    } else {
+      console.warn('Aucune commande trouvée ou ID manquant');
+      // Afficher un message d'erreur et rediriger
+      const orderDetails = document.getElementById('order-details');
+      if (orderDetails) {
+        orderDetails.innerHTML = '<p class="text-red-500">Aucune commande trouvée. Redirection en cours...</p>';
+      }
+
+      setTimeout(() => {
+        window.location.href = 'homepage.html';
+      }, 3000);
+    }
+  });
+</script>
+
+</body>
+</html>

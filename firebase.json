@@ -1,0 +1,109 @@
+{
+  "hosting": {
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**",
+      "README.md",
+      "Guide_Integration_Google_Apps_Script.md",
+      "google-apps-script-complet.js",
+      "rex-proxy/**"
+    ],
+    "cleanUrls": true,
+    "trailingSlash": false,
+    "headers": [
+      {
+        "source": "**/*.@(js|css)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=31536000"
+          }
+        ]
+      },
+      {
+        "source": "**/*.@(jpg|jpeg|gif|png|webp|svg)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=31536000"
+          }
+        ]
+      },
+      {
+        "source": "**/*.html",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=3600"
+          }
+        ]
+      }
+    ],
+    "rewrites": [
+      {
+        "source": "/",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/accueil",
+        "destination": "/pages/homepage.html"
+      },
+      {
+        "source": "/produits",
+        "destination": "/pages/product_catalog.html"
+      },
+      {
+        "source": "/catalogue",
+        "destination": "/pages/product_catalog.html"
+      },
+      {
+        "source": "/panier",
+        "destination": "/pages/shopping_cart_checkout.html"
+      },
+      {
+        "source": "/commande",
+        "destination": "/pages/shopping_cart_checkout.html"
+      },
+      {
+        "source": "/contact",
+        "destination": "/pages/contact_location.html"
+      },
+      {
+        "source": "/confirmation-commande",
+        "destination": "/pages/order_confirmation.html"
+      },
+      {
+        "source": "/recu-commande",
+        "destination": "/pages/order_receipt.html"
+      },
+      {
+        "source": "/order_confirmation",
+        "destination": "/pages/order_receipt.html"
+      }
+    ],
+    "redirects": [
+      {
+        "source": "/homepage",
+        "destination": "/accueil",
+        "type": 301
+      },
+      {
+        "source": "/product_catalog",
+        "destination": "/produits",
+        "type": 301
+      },
+      {
+        "source": "/shopping_cart_checkout",
+        "destination": "/panier",
+        "type": 301
+      },
+      {
+        "source": "/contact_location",
+        "destination": "/contact",
+        "type": 301
+      }
+    ]
+  }
+}

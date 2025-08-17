@@ -1,0 +1,101 @@
+[
+  {
+    "id": "prod001",
+    "nom": "Cake Simple",
+    "description": "Un délice moelleux et réconfortant, parfait pour accompagner votre café ou thé. Simplicité et saveur authentique au rendez-vous.",
+    "prix": 100,
+    "image": "public/photos/cake_simple.webp",
+    "categorie": "cakes",
+    "attributs_dietetiques": []
+  },
+  {
+    "id": "prod002",
+    "nom": "Crêpes au Chocolat",
+    "description": "Fines et légères, nos crêpes sont généreusement nappées d'un chocolat fondant et riche. Un pur moment de gourmandise.",
+    "prix": 200,
+    "image": "public/photos/crepes_chocolat.webp",
+    "categorie": "crepes",
+    "attributs_dietetiques": []
+  },
+  {
+    "id": "prod003",
+    "nom": "Crêpes Simples",
+    "description": "La crêpe traditionnelle dans toute sa splendeur, nature et délicate. Idéale à garnir selon vos envies ou à savourer avec une touche de sucre.",
+    "prix": 150,
+    "image": "public/photos/crepes_simples.webp",
+    "categorie": "crepes",
+    "attributs_dietetiques": []
+  },
+  {
+    "id": "prod004",
+    "nom": "CupCake Vanille Chocolat",
+    "description": "Un petit gâteau individuel irrésistible, alliant la douceur parfumée de la vanille à l'intensité du chocolat noir, le tout couronné d'un glaçage aérien.",
+    "prix": 300,
+    "image": "public/photos/cupcake_vanille_chocolat.webp",
+    "categorie": "cupcakes",
+    "attributs_dietetiques": []
+  },
+  {
+    "id": "prod005",
+    "nom": "Friand à la Viande",
+    "description": "Un chausson feuilleté doré et croustillant, renfermant une farce généreuse et savoureuse à la viande hachée, relevée d'aromates. Parfait pour une faim salée.",
+    "prix": 700,
+    "image": "public/photos/friand_viande.webp",
+    "categorie": "viennoiseries-salees",
+    "attributs_dietetiques": []
+  },
+  {
+    "id": "prod006",
+    "nom": "Friand au Poisson",
+    "description": "Une délicate pâte feuilletée pur beurre abritant une garniture onctueuse au poisson frais et fines herbes. Une touche marine légère et parfumée.",
+    "prix": 500,
+    "image": "public/photos/friand_poisson.webp",
+    "categorie": "viennoiseries-salees",
+    "attributs_dietetiques": []
+  },
+  {
+    "id": "prod007",
+    "nom": "Gâteau d'Anniversaire Personnalisé",
+    "description": "Célébrez vos moments inoubliables avec nos gâteaux d'anniversaire sur mesure. Choisissez le parfum, la garniture, la taille et le design. Un chef-d'œuvre unique pour votre événement. Prix à partir de 5000 Frcfa.",
+    "prix": 5000,
+    "image": "public/photos/gateau_anniversaire_personnalise.webp",
+    "categorie": "gateaux-speciaux",
+    "attributs_dietetiques": []
+  },
+  {
+    "id": "prod008",
+    "nom": "Mini Pizza",
+    "description": "Une explosion de saveurs italiennes en format bouchée ! Garniture fraîche et fromage fondant sur une pâte moelleuse. Idéales pour l'apéritif ou les petites faims.",
+    "prix": 500,
+    "image": "public/photos/mini_pizza.webp",
+    "categorie": "snacks-sales",
+    "attributs_dietetiques": []
+  },
+  {
+    "id": "prod009",
+    "nom": "Pastel",
+    "description": "Un incontournable de la street-food revisité : un chausson frit à la pâte croustillante, farci d'une préparation épicée et délicieuse. À dévorer chaud !",
+    "prix": 200,
+    "image": "public/photos/pastel.webp",
+    "categorie": "snacks-sales",
+    "attributs_dietetiques": []
+  },
+  {
+    "id": "prod010",
+    "nom": "Roulé aux Saucisses",
+    "description": "Une pâte briochée tendre et moelleuse enroulée autour d'une saucisse de qualité, le tout doré au four. Un classique réconfortant, parfait à toute heure.",
+    "prix": 300,
+    "image": "public/photos/roule_saucisses.webp",
+    "categorie": "viennoiseries-salees",
+    "attributs_dietetiques": []
+  },
+  {
+    "id": "prod011",
+    "nom": "Roulé au Chocolat",
+    "description": "Un biscuit génoise léger comme un nuage, garni d'une crème au chocolat intense et onctueuse, puis délicatement roulé pour une spirale de pur bonheur fondant.",
+    "prix": 300,
+    "image": "public/photos/roule_chocolat.webp",
+    "categorie": "viennoiseries-sucrees",
+    "attributs_dietetiques": []
+  }
+]
