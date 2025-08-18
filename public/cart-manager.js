@@ -1,60 +1,29 @@
 
-// =============================================
-// CART-MANAGER.JS - Gestionnaire de Panier E-commerce
-// =============================================
-// 
-// OBJECTIF: Gestion complète du panier d'achat, des données utilisateur et des commandes
-// INTÉGRATION: Fonctionne avec Google Apps Script via proxy Cloudflare Workers
-// DÉPENDANCES: app-config.js (pour la configuration), localStorage (pour la persistance)
-// 
-// FLUX PRINCIPAL:
-// 1. Chargement des données depuis localStorage au démarrage
-// 2. Gestion des opérations CRUD sur le panier (ajouter, modifier, supprimer)
-// 3. Synchronisation temps réel de l'affichage UI
-// 4. Validation et soumission des commandes via proxy
-// 5. Persistance automatique des données
-//
-// POINTS D'ATTENTION:
-// - Toutes les données sont stockées en localStorage avec préfixe 'kate_pastry_'
-// - L'URL du proxy Cloudflare est codée en dur (ligne 323)
-// - La validation email est basique (regex simple)
-// - Les notifications sont gérées via DOM manipulation directe
-//
-// TODO: Implémenter une gestion d'erreur plus robuste pour les cas de quota localStorage
-// TODO: Ajouter une validation plus stricte des données produit
-// NOTE: Ce fichier est le cœur du système e-commerce, toute modification doit être testée
+// CartManager amélioré pour fonctionner avec Google Apps Script via proxy Node.js/Express local
 
 class CartManager {
-    // ===== CONSTRUCTEUR ET INITIALISATION =====
-    // Charge automatiquement les données persistées et initialise l'affichage
     constructor() {
-        this.cart = this.loadCart();                    // Tableau des articles du panier
-        this.userData = this.loadUserData();            // Données client (nom, email, etc.)
-        this.orderData = this.loadOrderData();          // Données de commande (livraison, paiement)
-        this.init();                                    // Initialisation de l'affichage
+        this.cart = this.loadCart();
+        this.userData = this.loadUserData();
+        this.orderData = this.loadOrderData();
+        this.init();
     }
 
-    // Initialise l'affichage et affiche les informations de debug
     init() {
         console.log('🛒 Panier au démarrage:', this.cart);
         console.log('💰 Total calculé:', this.getCartTotal());
-        this.updateCartDisplay();                       // Met à jour tous les éléments UI du panier
+        this.updateCartDisplay();
         console.log('CartManager initialisé avec succès');
     }
 
     // ===== GESTION DU PANIER =====
-    // Méthodes pour ajouter, supprimer et modifier les articles du panier
-    
-    // Ajoute un produit au panier ou incrémente sa quantité s'il existe déjà
-    // PARAMÈTRE: product = {id, name, price, image, category}
-    // EFFET DE BORD: Met à jour localStorage et tous les affichages UI
+
     addToCart(product) {
         const existingItem = this.cart.find(item => item.id === product.id);
 
         if (existingItem) {
-            existingItem.quantity += 1;                // Incrémente si produit déjà présent
+            existingItem.quantity += 1;
         } else {
-            // Crée un nouvel objet article avec toutes les propriétés nécessaires
             this.cart.push({
                 id: product.id,
                 name: product.name,
@@ -65,14 +34,12 @@ class CartManager {
             });
         }
 
-        this.saveCart();                               // Persistance en localStorage
-        this.updateCartDisplay();                      // Met à jour compteurs et totaux
-        this.updateCartItemsDisplay();                 // Met à jour liste détaillée
+        this.saveCart();
+        this.updateCartDisplay();
+        this.updateCartItemsDisplay();
         this.showNotification(`${product.name} ajouté au panier`);
     }
 
-    // Supprime complètement un produit du panier
-    // PARAMÈTRE: productId = identifiant unique du produit
     removeFromCart(productId) {
         this.cart = this.cart.filter(item => item.id !== productId);
         this.saveCart();
@@ -81,36 +48,29 @@ class CartManager {
         this.showNotification('Article supprimé du panier');
     }
 
-    // Modifie la quantité d'un produit spécifique
-    // PARAMÈTRE: productId = identifiant, newQuantity = nouvelle quantité (si ≤0, supprime l'article)
     updateQuantity(productId, newQuantity) {
         const item = this.cart.find(item => item.id === productId);
         if (item) {
             if (newQuantity <= 0) {
-                this.removeFromCart(productId);        // Suppression si quantité nulle/négative
+                this.removeFromCart(productId);
             } else {
                 item.quantity = newQuantity;
                 this.saveCart();
                 this.updateCartDisplay();
                 this.updateCartItemsDisplay();
-                this.updateOrderSummary();             // Met à jour le récapitulatif de commande
+                this.updateOrderSummary();
             }
         }
     }
 
-    // Calcule le montant total du panier (prix × quantité pour chaque article)
-    // RETOUR: nombre (montant en FCFA)
     getCartTotal() {
         return this.cart.reduce((total, item) => total + (item.price * item.quantity), 0);
     }
 
-    // Calcule le nombre total d'articles dans le panier
-    // RETOUR: nombre (somme des quantités)
     getCartCount() {
         return this.cart.reduce((count, item) => count + item.quantity, 0);
     }
 
-    // Vide complètement le panier (utilisé après validation de commande)
     clearCart() {
         this.cart = [];
         this.saveCart();
@@ -119,53 +79,38 @@ class CartManager {
     }
 
     // ===== GESTION DES DONNÉES UTILISATEUR =====
-    // Persistance des informations client (nom, email, adresse, etc.)
-    
-    // Sauvegarde les données utilisateur (fusion avec données existantes)
-    // PARAMÈTRE: data = objet contenant les champs à mettre à jour
+
     saveUserData(data) {
-        this.userData = { ...this.userData, ...data };  // Fusion des données
+        this.userData = { ...this.userData, ...data };
         this.saveToStorage('userData', this.userData);
     }
 
-    // Récupère les données utilisateur actuelles
-    // RETOUR: objet avec firstName, lastName, email, phone, address, etc.
     getUserData() {
         return this.userData;
     }
 
     // ===== GESTION DES DONNÉES DE COMMANDE =====
-    // Persistance des options de livraison, paiement, instructions spéciales
-    
-    // Sauvegarde les données de commande (options de livraison, paiement)
-    // PARAMÈTRE: data = objet contenant deliveryOption, paymentMethod, etc.
+
     saveOrderData(data) {
         this.orderData = { ...this.orderData, ...data };
         this.saveToStorage('orderData', this.orderData);
     }
 
-    // Récupère les données de commande actuelles
     getOrderData() {
         return this.orderData;
     }
 
     // ===== PERSISTANCE DES DONNÉES =====
-    // Gestion du stockage localStorage avec gestion d'erreurs
-    
-    // Sauvegarde le panier en localStorage
+
     saveCart() {
         this.saveToStorage('cart', this.cart);
         console.log('Panier sauvegardé:', this.cart);
     }
 
-    // Charge le panier depuis localStorage
-    // RETOUR: tableau d'articles ou tableau vide si aucune donnée
     loadCart() {
         return this.loadFromStorage('cart') || [];
     }
 
-    // Charge les données utilisateur avec valeurs par défaut
-    // RETOUR: objet avec structure complète des données client
     loadUserData() {
         return this.loadFromStorage('userData') || {
             firstName: '',
@@ -174,7 +119,7 @@ class CartManager {
             email: '',
             address: '',
             district: '',
-            city: 'Lomé',                              // Valeur par défaut pour Togo
+            city: 'Lomé',
             postalCode: '',
             instructions: '',
             isGift: false,
@@ -182,33 +127,25 @@ class CartManager {
         };
     }
 
-    // Charge les données de commande
     loadOrderData() {
         return this.loadFromStorage('orderData') || {};
     }
 
-    // Sauvegarde générique en localStorage avec préfixe et gestion d'erreurs
-    // PARAMÈTRES: key = clé de stockage, data = données à sérialiser
-    // NOTE: Utilise le préfixe 'kate_pastry_' pour éviter les conflits
     saveToStorage(key, data) {
         try {
             localStorage.setItem(`kate_pastry_${key}`, JSON.stringify(data));
         } catch (error) {
             console.error('Erreur lors de la sauvegarde:', error);
-            // TODO: Implémenter une stratégie de fallback (ex: sessionStorage)
         }
     }
 
-    // Chargement générique depuis localStorage avec gestion d'erreurs
-    // PARAMÈTRE: key = clé de stockage
-    // RETOUR: données désérialisées ou null si erreur/inexistant
     loadFromStorage(key) {
         try {
             const data = localStorage.getItem(`kate_pastry_${key}`);
             return data ? JSON.parse(data) : null;
         } catch (error) {
             console.error('Erreur lors du chargement:', error);
-            return null;                               // Retour sécurisé en cas d'erreur JSON
+            return null;
         }
     }
 

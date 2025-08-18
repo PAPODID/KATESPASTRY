@@ -64,7 +64,7 @@ async function handleRequest(request) {
   if (request.method === 'POST' && new URL(request.url).pathname === '/submit-order') {
     // URL du Google Apps Script déployé (Web App)
     // ATTENTION: URL sensible, devrait être en variable d'environnement
-    const appsScriptUrl = 'https://script.google.com/macros/s/AKfycbyfMkCjX3_3eK_-O4HzLJPB5EpOT0OIQoSKowsq9cYscqNozB7jyuSijEoPuT8x_R91/exec';
+    const appsScriptUrl = 'https://script.google.com/macros/s/AKfycbxqtFsPrZHfDokyAJDVLOFWgiVpNCRt-cH0a5z1EQCo9xwdoNsKRGGo1q2iY_jqNnWN/exec';
 
     try {
       // ===== EXTRACTION DES DONNÉES =====

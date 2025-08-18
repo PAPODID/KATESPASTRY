@@ -1,25 +1,23 @@
 # 🥖 KATE'S PASTRY - Application E-commerce de Boulangerie Artisanale
 
-Une application web moderne et responsive pour une boulangerie artisanale française, offrant une expérience utilisateur élégante et un système e-commerce complet. Développée avec HTML5, CSS3 et JavaScript, elle propose un catalogue de produits, un panier d'achat avancé et une intégration avec Google Apps Script pour la gestion des commandes.
+Une application web moderne et responsive pour une boulangerie artisanale française, offrant une expérience utilisateur élégante et un système e-commerce complet côté client. Développée avec HTML5, CSS3 et JavaScript, elle propose un catalogue de produits, un panier d'achat avancé et une intégration avec Google Apps Script pour l'émission et le suivi des précommandes.
 
 ## ✨ Fonctionnalités Principales
 
 - **🎨 Design Élégant** - Interface moderne et responsive avec animations fluides
-- **🛒 E-commerce Complet** - Système de panier et processus de commande intégré
+- **🛒 E-commerce Complet** - Système de panier et processus de précommande intégré
 - **📱 Mobile-First** - Design entièrement responsive optimisé pour tous les appareils
 - **⚡ Performance Optimisée** - Images optimisées et structure de code efficace
 - **🎭 Éléments Interactifs** - Animations et interactions utilisateur fluides
 - **🌍 Support Multi-langues** - Contenu en français et anglais
 - **📸 Galerie Produits** - Présentation élégante des produits avec carousel
-- **📊 Gestion des Commandes** - Intégration Google Apps Script pour le suivi
-- **💳 Options de Paiement** - Mobile Money, Carte bancaire, Paiement à la livraison
-- **🚚 Options de Livraison** - Gozem Express, Bkg Standard, Olé Économique, Retrait
+- **📊 Émission de Précommandes** - Intégration Google Apps Script pour l'envoi et le suivi des précommandes
 
 ## 🛠️ Technologies Utilisées
 
 - **Frontend** : HTML5, CSS3 (Tailwind CSS), JavaScript (Vanilla)
 - **Hébergement** : Firebase Hosting
-- **Backend** : Google Apps Script pour la gestion des commandes
+- **Backend** : Google Apps Script pour l'émission des précommandes
 - **Proxy API** : Cloudflare Workers (rex-proxy)
 - **Gestion des Données** : JSON local, Google Sheets
 - **Tests** : Vitest (pour le proxy)
@@ -60,12 +58,12 @@ Une application web moderne et responsive pour une boulangerie artisanale franç
 
 ### Configuration Avancée (Google Apps Script)
 
-Pour activer la gestion des commandes via Google Sheets :
+Pour activer l'émission des précommandes via Google Sheets :
 
 1. **Créer un classeur Google Sheets** avec les feuilles "Commandes" et "Clients"
 2. **Déployer le script Google Apps Script** (voir `google-apps-script-complet.js`)
 3. **Configurer l'URL du script** dans les fichiers de configuration
-4. **Tester l'intégration** avec une commande test
+4. **Tester l'intégration** avec une précommande test
 
 Consultez le `Guide_Integration_Google_Apps_Script.md` pour les détails complets.
 
@@ -80,9 +78,9 @@ kate-pastry-project/
 │   ├── homepage.html               # Page d'accueil avec hero section
 │   ├── product_catalog.html        # Catalogue des produits
 │   ├── product_detail_page.html    # Détails des produits
-│   ├── shopping_cart_checkout.html # Panier et processus de commande
-│   ├── order_confirmation.html     # Confirmation de commande
-│   ├── order_receipt.html          # Reçu de commande
+│   ├── shopping_cart_checkout.html # Panier et processus de précommande
+│   ├── order_confirmation.html     # Confirmation de précommande
+│   ├── order_receipt.html          # Reçu de précommande
 │   └── contact_location.html       # Contact et localisation
 ├── public/                         # Assets statiques et scripts
 │   ├── photos/                     # Images des produits
@@ -127,24 +125,20 @@ L'application propose **11 produits artisanaux** répartis en plusieurs catégor
 ### 🎂 Gâteaux Spéciaux
 - **Gâteau d'Anniversaire Personnalisé** (à partir de 5000 FCFA) - Sur mesure
 
-## 💳 Système de Paiement et Livraison
+## 📊 Émission de Précommandes
 
-### Options de Paiement
-- **Mobile Money** - Orange Money, Wave, etc.
-- **Carte Bancaire** - Visa, Mastercard
-- **Paiement à la Livraison** - Espèces
+La plateforme, conçue pour une utilisation côté client, permet aux utilisateurs de soumettre des précommandes qui sont gérées via une intégration avec Google Apps Script et enregistrées dans Google Sheets. Après chaque précommande, les données suivantes sont collectées et enregistrées :
 
-### Options de Livraison
-- **Gozem Express** (1500 FCFA) - 30-45 minutes
-- **Bkg Standard** (1200 FCFA) - 45-60 minutes
-- **Olé Économique** (800 FCFA) - 60-90 minutes
-- **Retrait en Boutique** (Gratuit) - 15-20 minutes
+- **ID Commande** : Identifiant unique de la précommande
+- **Date** : Date et heure de la précommande
+- **Nom** : Nom du client
+- **Prénom** : Prénom du client
+- **Email** : Adresse e-mail du client
+- **Téléphone** : Numéro de téléphone du client
+- **Total** : Montant total de la précommande (en FCFA)
+- **Articles (JSON)** : Détails des articles précommandés, stockés au format JSON
 
-### Conditions
-- **Commande minimum** : 2000 FCFA
-- **Livraison gratuite** : à partir de 10000 FCFA
-- **Délai de préparation** : 24h minimum obligatoire
-- **TVA** : 18% incluse dans les prix
+Ces données sont automatiquement envoyées à la feuille "Commandes" dans le classeur Google Sheets configuré pour assurer un suivi efficace. Pour plus de détails, consultez le `Guide_Integration_Google_Apps_Script.md`.
 
 ## 🎨 Caractéristiques Techniques
 
@@ -261,6 +255,6 @@ Ce projet est open source et disponible sous licence MIT. Voir les fichiers de l
 
 ---
 
-**Développé avec ❤️ pour l'amour de la boulangerie artisanale**
+**Développé pour l'amour de la boulangerie artisanale**
 
 *Découvrez le goût de la tradition avec KATE'S PASTRY*
